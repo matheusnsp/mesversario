@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surpresa ❤️</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="card animate" id="mainCard">
+    <h1>Quer ver seu presente de mêsversário? 🎁</h1>
+
+    <div class="buttons" id="btnContainer">
+      <button class="btn green" id="simBtn">Sim</button>
+      <button class="btn red" id="naoBtn">Não</button>
+    </div>
+
+    <p id="mensagem" class="mensagem"></p>
+
+    <!-- Caixa de texto aparece só quando necessário -->
+    <div id="textoContainer" class="hidden">
+
+      <input type="text" id="fraseInput" placeholder="Digite aqui exatamente..." />
+
+      <button class="btn green" id="confirmarTexto">Confirmar</button>
+      <p id="erroTexto" class="erro"></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

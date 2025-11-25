@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nosso Mêsversário ❤️</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="card animate">
+
+    <h1>Feliz Mêsversário, meu amor! ❤️✨</h1>
+
+    <p class="subtext">
+      Hoje é mais um mês com você... e eu não poderia estar mais feliz 🥰
+    </p>
+
+    <!-- Tempo juntos -->
+    <div id="tempo" class="subtext" style="margin-top: 20px; font-size: 20px; font-weight: 600;">
+      Calculando nosso tempo juntos... ⏳
+    </div>
+
+    <!-- Lista das coisas que gosto nela -->
+    <h2 style="margin-top: 30px;">Coisas que eu amo em você 💖</h2>
+
+    <ul class="lista">
+        <li>A forma como você busca a Deus e vive como verdadeira serva d’Ele 🙏✨</li>
+        <li>Seu sorriso que ilumina qualquer lugar e me desmonta sempre</li>
+        <li>Seu jeitinho amável e carinhoso, que só você tem</li>
+        <li>Como você trata as pessoas com tanta gentileza e respeito</li>
+        <li>Seu abraço que vira meu dia completamente</li>
+        <li>Seu olhar que fala mais do que mil palavras</li>
+        <li>O quanto você me traz paz, leveza e vontade de ser melhor</li>
+        <li>Seu coração tão lindo, puro e cheio de bondade</li>
+      </ul>
+
+    <!-- Álbum -->
+    <h2 style="margin-top: 30px;">Fotos que mais amo 📸</h2>
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px;">
+      <img src="foto1.jpg" style="width:100%; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.25);">
+      <img src="foto2.jpeg" style="width:100%; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.25);">
+      <img src="foto3.jpg" style="width:100%; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.25);">
+      <img src="foto4.jpeg" style="width:100%; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.25);">
+    </div>
+
+    <!-- Mensagem final -->
+    <h2 style="margin-top: 35px;">Mensagem pra você ❤️</h2>
+
+    <p style="font-size: 18px; margin-top: 10px; line-height: 1.6; opacity: 0.9;">
+        Meu amor, cada mês ao seu lado é um presente que Deus coloca na minha vida com um carinho tão nítido que às vezes eu nem sei explicar. 
+        Desde que você chegou, tudo ficou mais leve, mais bonito, mais cheio de propósito. 
+        Eu olho pra você e lembro que Deus realmente cumpre Suas promessas no tempo certo.
+        <br><br>
+        A forma como você ama, como você cuida, como você busca a Deus… tudo isso me inspira. 
+        E eu vejo o brilho que Ele colocou em você em cada detalhe — no seu sorriso, na sua fé, no seu coração tão puro, 
+        nas suas palavras que acalmam, no seu jeito que me lembra que o amor verdadeiro existe.
+        <br><br>
+        Às vezes eu me pego pensando naquele versículo que diz: 
+        <i>“O amor é paciente, o amor é bondoso…”</i> e percebo que Deus usou você pra me ensinar isso na prática. 
+        Você me mostra um amor que não desiste, que entende, que acolhe, que transforma.
+        <br><br>
+        Obrigado por ser essa bênção que Deus colocou no meu caminho. 
+        Por me lembrar que Ele escreve histórias melhores do que qualquer coisa que eu poderia imaginar. 
+        Por caminhar comigo, rir comigo, orar comigo e construir algo tão nosso, tão especial.
+        <br><br>
+        Minha oração é que Deus continue guiando cada passo nosso. 
+        Que Ele abençoe nossos planos, nos fortaleça nos desafios e nos una ainda mais a cada mês, a cada dia, a cada momento.  
+        Que Ele cuide do nosso amor como sempre cuidou — com graça, cuidado e propósito.
+        <br><br>
+        Eu te amo mais do que consigo colocar em palavras, mais do que cabe em qualquer texto, 
+        e mais do que qualquer forma de tentar explicar.  
+        Obrigado por existir do jeitinho lindo que você é. ❤️
+      </p>
+      <p style="font-size: 18px; margin-top: 25px; text-align: right; opacity: 0.9;">
+        Com muito carinho e amor,<br>
+        <strong>Matheus ❤️</strong>
+      </p>
+           
+  </div>
+
+  <script>
+    // Cálculo do tempo juntos
+    const inicio = new Date(2025, 4, 24); // 24/05/2025 (mês é 0–11)
+    const agora = new Date();
+
+    const diff = agora - inicio;
+
+    const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const meses = Math.floor(dias / 30);
+    const diasRestantes = dias % 30;
+
+    document.getElementById("tempo").innerHTML =
+      `Estamos juntos há <strong>${meses} meses</strong> e <strong>${diasRestantes} dias</strong> 💞`;
+  </script>
+
+
+</body>
+</html>
