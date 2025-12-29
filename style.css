@@ -1,0 +1,227 @@
+/* ===========================
+   PRESENTE.HTML — STYLE.CSS
+   baseado no seu ref (Poppins + glass + gradiente)
+   =========================== */
+
+/* ======= IMPORT FONT ======= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+
+/* ======= RESET & BASE ======= */
+body {
+  /* margin: 30px; */
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #ff8ab5 0%, #ff3d7b 45%, #8b0036 100%);
+  background-size: 200% 200%;
+  animation: bgMove 10s ease infinite;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0px;
+}
+  
+
+@keyframes bgMove {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* ======= CARD (GLASS) ======= */
+.card {
+  width: 100%;
+  max-width: 720px;         /* ajustei para conter o álbum */
+  padding: 34px;
+  border-radius: 20px;
+  backdrop-filter: blur(18px);
+  background: rgba(255,255,255,0.10);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+  text-align: center;
+  transform-style: preserve-3d;
+  overflow: hidden;
+}
+
+
+/* Fade in */
+.animate {
+  animation: fade 0.8s ease forwards;
+  opacity: 0;
+}
+@keyframes fade {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ======= HEADINGS & TEXT ======= */
+h1 {
+  line-height: 1.2;
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+  text-shadow: 0 6px 18px rgba(139,0,54,0.25);
+}
+
+.subtext {
+  margin-top: 8px;
+  font-size: 16px;
+  opacity: 0.95;
+  color: rgba(255,255,255,0.95);
+}
+
+/* Tempo juntos */
+#tempo {
+  margin-top: 18px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ======= SECTIONS ======= */
+h2 {
+  margin-top: 28px;
+  font-size: 20px;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ======= LISTA ======= */
+.lista {
+  margin-top: 16px;
+  text-align: left;
+  font-size: 17px;
+  list-style: none;
+  padding: 0;
+  line-height: 1.9;
+  display: grid;
+  gap: 10px;
+}
+
+.lista li {
+  margin-bottom: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  padding: 12px 14px;
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+  color: #fff;
+  font-weight: 500;
+}
+
+/* ======= ÁLBUM (grid responsivo) ======= */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.album-grid img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: transform .25s ease, box-shadow .25s ease;
+  cursor: pointer;
+}
+
+.album-grid img:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 18px 36px rgba(0,0,0,0.32);
+}
+
+/* estilo para imagens grandes (quando em telas maiores) */
+@media (min-width: 720px) {
+  .album-grid img { height: 160px; }
+}
+
+/* ======= BOTÕES (caso queira) ======= */
+.buttons {
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  margin-top:24px;
+}
+
+.btn {
+  padding: 10px 26px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  color: white;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.2);
+  transition: transform .2s ease, box-shadow .2s ease;
+  background: linear-gradient(135deg,#ff7fb3,#ff3d7b);
+}
+
+.btn:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.28); }
+
+/* ======= MENSAGEM FINAL ======= */
+p.final-msg {
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.95);
+}
+
+/* ======= MISC (overlay / hidden / inputs) ======= */
+.hidden { display: none; }
+
+#textoContainer { margin-top: 18px; }
+.texto-label { font-size: 16px; margin-bottom: 8px; color: #fff; }
+.texto-frase { font-weight: 700; margin-bottom: 12px; font-size: 18px; color: #fff; }
+
+#fraseInput {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
+  font-size: 15px;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  outline: none;
+}
+
+/* erro */
+.erro {
+  color: #ffd6da;
+  font-size: 14px;
+  min-height: 18px;
+}
+
+/* Botão fugitivo (caso reutilize) */
+.fugitivo {
+  position: absolute !important;
+  transition: left .12s ease, top .12s ease;
+}
+
+/* ======= RESPONSIVIDADE ======= */
+@media (max-width: 480px) {
+  .card { padding: 18px; border-radius: 16px; }
+  h1 { font-size: 22px; }
+  .album-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .album-grid img { height: 120px; }
+  .lista li { font-size: 15px; padding: 10px 12px; }
+}
+
+/* ======= PEQUENAS MELHORIAS VISUAIS ======= */
+/* sutil glow abaixo do card */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: auto 12px 12px 12px;
+  height: 60px;
+  border-radius: 12px;
+  filter: blur(28px);
+  background: linear-gradient(90deg, rgba(255,130,185,0.12), rgba(255,61,123,0.08));
+  pointer-events: none;
+  z-index: -1;
+}
