@@ -1,224 +1,191 @@
-let fase = 0;
-let segundaChance = false;
+// ─── TILT 3D (hover com inclinação direcional seguindo o mouse) ───
+/*
+const TILT_MAX   = 14;
+const TILT_SCALE = 1.03;
 
-const msg = document.getElementById("mensagem");
-const naoBtn = document.getElementById("naoBtn");
-const simBtn = document.getElementById("simBtn");
-const textoBox = document.getElementById("textoContainer");
-const fraseInput = document.getElementById("fraseInput");
-const confirmarTexto = document.getElementById("confirmarTexto");
-const erroTexto = document.getElementById("erroTexto");
+function applyTilt(card) {
+  card.addEventListener("mousemove", (e) => {
+    const rect = card.getBoundingClientRect();
+    const cx   = rect.left + rect.width  / 2;
+    const cy   = rect.top  + rect.height / 2;
+    const dx   = (e.clientX - cx) / (rect.width  / 2);
+    const dy   = (e.clientY - cy) / (rect.height / 2);
+    const rotX = -dy * TILT_MAX;
+    const rotY =  dx * TILT_MAX;
 
-// FRASES DAS PROVAS
-const frasesSecretas = [
-  "Eu realmente quero, meu príncipe!",
-  "Eu te amo e quero ver o presente!",
-  "Tá bom, eu admito, você venceu! ❤️"
-];
+    card.style.transform = `perspective(700px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(${TILT_SCALE})`;
 
-const mensagens = [
-  "Calma aí 😂 responde o outro botão primeiro!", // fase 0
-  "Tem certeza que não quer ver? 👀",              // fase 1
-  "Sério isso??? 😳",                              // fase 2
-  "Última chance, hein 😤",                        // usada após vírus
-  "Digite exatamente a frase abaixo 👇"            // fase da prova
-];
+    let shine = card.querySelector(".tilt-shine");
+    if (!shine) {
+      shine = document.createElement("div");
+      shine.className = "tilt-shine";
+      shine.style.cssText = `
+        position:absolute; inset:0; border-radius:inherit;
+        pointer-events:none; z-index:1; transition:opacity 0.12s ease;
+      `;
+      card.appendChild(shine);
+    }
+    const angle     = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+    const intensity = Math.hypot(dx, dy) * 0.18;
+    shine.style.background = `linear-gradient(${angle}deg, rgba(255,255,255,${intensity.toFixed(3)}) 0%, rgba(255,255,255,0) 60%)`;
+  });
 
-// =======================
-// OVERLAY DA TELA PRETA
-// =======================
-const overlay = document.createElement("div");
-overlay.id = "virusOverlay";
-overlay.style = `
+  card.addEventListener("mouseleave", () => {
+    card.style.transition = "transform 0.45s cubic-bezier(.23,1,.32,1)";
+    card.style.transform  = "perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)";
+    const shine = card.querySelector(".tilt-shine");
+    if (shine) shine.style.background = "none";
+    setTimeout(() => { card.style.transition = ""; }, 450);
+  });
+
+  card.addEventListener("mouseenter", () => {
+    card.style.transition = "transform 0.12s ease";
+  });
+}
+
+document.querySelectorAll(".love-card, .letter-card").forEach(applyTilt);
+*/
+
+// ─── TIMER ───
+const inicio = new Date(2025, 4, 24);
+function updateTimer() {
+  const agora = new Date();
+  const diff = agora - inicio;
+  const totalDias = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const meses = Math.floor(totalDias / 30);
+  const diasRestantes = totalDias % 30;
+  const horas = agora.getHours();
+  document.getElementById('t-meses').textContent = meses;
+  document.getElementById('t-dias').textContent = diasRestantes;
+  document.getElementById('t-horas').textContent = horas;
+}
+updateTimer();
+setInterval(updateTimer, 60000);
+
+// ─── CANVAS PARTÍCULAS ───
+const canvas = document.getElementById('canvas-bg');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const symbols = ['❤', '✦', '·'];
+for (let i = 0; i < 55; i++) {
+  particles.push({
+    x: Math.random() * 1000,
+    y: Math.random() * 1000,
+    vy: -(0.15 + Math.random() * 0.35),
+    vx: (Math.random() - 0.5) * 0.2,
+    size: 8 + Math.random() * 12,
+    alpha: 0.04 + Math.random() * 0.12,
+    sym: symbols[Math.floor(Math.random() * symbols.length)]
+  });
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => {
+    p.y += p.vy;
+    p.x += p.vx;
+    if (p.y < -20) { p.y = H + 20; p.x = Math.random() * W; }
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = '#e8627a';
+    ctx.font = `${p.size}px serif`;
+    ctx.fillText(p.sym, p.x % W, p.y % H);
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ─── SCROLL REVEAL ───
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(r => observer.observe(r));
+
+// ─── LIGHTBOX (foto abre ao clicar) ───
+const lightbox = document.createElement("div");
+lightbox.id = "lightbox";
+lightbox.style.cssText = `
   display: none;
-  opacity: 0;
-  transition: opacity .5s ease-in-out;
-  background: black;
-  color: white;
-  z-index: 99999;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 2, 6, 0);
+  backdrop-filter: blur(0px);
   justify-content: center;
   align-items: center;
-  text-align: center;
+  cursor: zoom-out;
+  transition: background 0.35s ease, backdrop-filter 0.35s ease;
 `;
-overlay.innerHTML = `<p id="virusText" style="font-size:2em;"></p>`;
-document.body.appendChild(overlay);
+lightbox.innerHTML = `
+  <img id="lightbox-img" src="" alt="" style="
+    max-width: 90vw;
+    max-height: 88vh;
+    border-radius: 16px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+    transform: scale(0.88);
+    opacity: 0;
+    transition: transform 0.38s cubic-bezier(.23,1,.32,1), opacity 0.38s ease;
+    cursor: default;
+  ">
+`;
+document.body.appendChild(lightbox);
 
+const lbImg = document.getElementById("lightbox-img");
 
-// =======================
-// FUNÇÃO DO VÍRUS
-// =======================
-function iniciarTelaPretaVirus(callback = null) {
-  overlay.style.display = "flex";
-  setTimeout(() => overlay.style.opacity = "1", 10);
+function openLightbox(src) {
+  lbImg.src = src;
+  lightbox.style.display = "flex";
 
-  let count = 5;
-  const virusText = document.getElementById("virusText");
-  virusText.textContent = `Injetando vírus em ${count}...`;
+  // força reflow pra animação funcionar
+  lightbox.offsetHeight;
 
-  const timer = setInterval(() => {
-    if (count > 0) {
-      count--;
-      virusText.textContent = `Injetando vírus em ${count}...`;
-    } else {
-      clearInterval(timer);
-      virusText.innerHTML = `
-        Brincadeira kkkkkk 😂<br><br>
-        APERTA <strong>SIM</strong> LOGO, CASSETA 😡
-      `;
+  lightbox.style.background = "rgba(10, 2, 6, 0.92)";
+  lightbox.style.backdropFilter = "blur(12px)";
+  lbImg.style.transform = "scale(1)";
+  lbImg.style.opacity   = "1";
 
-      setTimeout(() => {
-        overlay.style.opacity = "0";
-        setTimeout(() => {
-          overlay.style.display = "none";
-
-          if (callback) callback();
-        }, 500);
-      }, 1500);
-    }
-  }, 700);
+  document.body.style.overflow = "hidden";
 }
 
+function closeLightbox() {
+  lightbox.style.background    = "rgba(10, 2, 6, 0)";
+  lightbox.style.backdropFilter = "blur(0px)";
+  lbImg.style.transform = "scale(0.88)";
+  lbImg.style.opacity   = "0";
 
-// =======================
-// FASE DE PROVA
-// =======================
-function iniciarFaseDeProva() {
-  textoBox.classList.remove("hidden");
-
-  const frase = frasesSecretas[Math.min(Math.floor(fase / 6), frasesSecretas.length - 1)];
-
-  msg.innerHTML = `
-    ${mensagens[4]}
-    <p><strong>"${frase}"</strong></p>
-    <p>Então prova 😏</p>
-    <p>Escreve exatamente:</p>
-    <p><strong>"${frase}"</strong></p>
-  `;
-
-  fraseInput.value = "";
+  setTimeout(() => {
+    lightbox.style.display = "none";
+    lbImg.src = "";
+    document.body.style.overflow = "";
+  }, 380);
 }
 
+// clique fora da imagem fecha
+lightbox.addEventListener("click", (e) => {
+  if (e.target !== lbImg) closeLightbox();
+});
 
-// =======================
-// BOTÃO SIM
-// =======================
-simBtn.onclick = () => {
+// ESC também fecha
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeLightbox();
+});
 
-  // Dois primeiros SIM → vai direto para presente.html
-  if (fase === 0 || fase === 1) {
-    window.location.href = "presente.html";
-    return;
-  }
-
-  // Depois do vírus → vai para a prova
-  if (fase === 2) {
-    fase = 3;
-    iniciarFaseDeProva();
-    return;
-  }
-
-  // Fase da prova → só termina depois da frase
-  if (fase >= 3 && !segundaChance) {
-    msg.textContent = "Precisa escrever a frase primeiro 😏";
-    return;
-  }
-
-  // Segunda chance → SIM abre o presente
-  if (segundaChance) {
-    window.location.href = "presente.html";
-  }
-};
-
-
-// =======================
-// BOTÃO NÃO
-// =======================
-naoBtn.onclick = () => {
-
-  // NÃO fugindo do sim → começa o vírus
-  if (fase === 0) {
-    fase = 1;
-    msg.textContent = mensagens[1];
-    return;
-  }
-
-  if (fase === 1) {
-    fase = 2;
-    msg.textContent = mensagens[2];
-    return;
-  }
-
-  // Após fase 2 → vírus + "Última chance"
-  if (fase === 2) {
-    iniciarTelaPretaVirus(() => {
-      msg.textContent = mensagens[3];
-    });
-    return;
-  }
-
-  // Se clicar NÃO depois da "última chance": vírus de novo
-  if (fase === 3 && !segundaChance) {
-    iniciarTelaPretaVirus(() => {
-      msg.textContent = mensagens[3];
-    });
-    return;
-  }
-
-  // Segunda chance: NÃO foge do mouse (JS do mouse controla)
-};
-
-
-// =======================
-// CONFIRMAÇÃO DA FRASE CORRETA
-// =======================
-confirmarTexto.onclick = () => {
-  const frase = frasesSecretas[Math.min(Math.floor(fase / 6), frasesSecretas.length - 1)];
-
-  if (fraseInput.value.trim() === frase) {
-    erroTexto.textContent = "";
-    msg.textContent = "Hmmmm ok 😏 vou te dar uma nova chance...";
-
-    segundaChance = true;
-
-    setTimeout(() => {
-      textoBox.classList.add("hidden");
-      msg.textContent = "Agora escolhe direitinho 😌";
-    }, 1200);
-
-  } else {
-    erroTexto.textContent = "Tem que ser exatamente igual 😒";
-  }
-};
-
-
-// =======================
-// BOTÃO NÃO FOGE DO MOUSE (segunda chance)
-// =======================
-document.addEventListener("mousemove", (e) => {
-  if (!segundaChance) return;
-
-  const btn = naoBtn.getBoundingClientRect();
-  const mouseX = e.clientX;
-  const mouseY = e.clientY;
-
-  const btnCenterX = btn.left + btn.width / 2;
-  const btnCenterY = btn.top + btn.height / 2;
-
-  const distX = Math.abs(mouseX - btnCenterX);
-  const distY = Math.abs(mouseY - btnCenterY);
-
-  // Se o mouse estiver perto
-  if (distX < 120 && distY < 120) {
-
-    // Limites da tela
-    const novaLeft = Math.max(0, Math.min(window.innerWidth - btn.width - 10, Math.random() * window.innerWidth));
-    const novaTop = Math.max(0, Math.min(window.innerHeight - btn.height - 10, Math.random() * window.innerHeight));
-
-    naoBtn.style.position = "absolute";
-    naoBtn.style.left = `${novaLeft}px`;
-    naoBtn.style.top = `${novaTop}px`;
-  }
+// aplica em todas as fotos da galeria
+document.querySelectorAll(".photo-grid img").forEach(img => {
+  img.style.cursor = "zoom-in";
+  img.addEventListener("click", () => openLightbox(img.src));
 });
