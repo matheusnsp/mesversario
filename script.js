@@ -62,6 +62,22 @@ function updateTimer() {
 updateTimer();
 setInterval(updateTimer, 60000);
 
+// ─── TIMELINE 1 ANO ───
+const timelineFill = document.getElementById('timeline-fill');
+if (timelineFill) {
+  const tlObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => {
+          timelineFill.style.width = 'calc(100% - 16px)';
+        }, 300);
+        tlObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  tlObserver.observe(timelineFill.parentElement);
+}
+
 // ─── CANVAS PARTÍCULAS ───
 const canvas = document.getElementById('canvas-bg');
 const ctx = canvas.getContext('2d');
