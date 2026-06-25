@@ -205,3 +205,53 @@ document.querySelectorAll(".photo-grid img").forEach(img => {
   img.style.cursor = "zoom-in";
   img.addEventListener("click", () => openLightbox(img.src));
 });
+
+// ─── CARTAS RECOLHÍVEIS (clicar pra abrir/fechar) ───
+document.querySelectorAll(".letter-card").forEach(card => {
+  const header = card.querySelector(".letter-month");
+  const text   = card.querySelector(".letter-text");
+  if (!header || !text) return;
+
+  // embrulha o texto num invólucro que controla a altura
+  const wrap = document.createElement("div");
+  wrap.className = "letter-body";
+  text.parentNode.insertBefore(wrap, text);
+  wrap.appendChild(text);
+
+  // marca o cabeçalho como botão clicável e adiciona a setinha
+  card.classList.add("collapsible");
+  header.setAttribute("role", "button");
+  header.setAttribute("tabindex", "0");
+  header.setAttribute("aria-expanded", "false");
+
+  const chevron = document.createElement("span");
+  chevron.className = "letter-chevron";
+  chevron.textContent = "▾";
+  chevron.setAttribute("aria-hidden", "true");
+  header.appendChild(chevron);
+
+  function toggle() {
+    const isOpen = card.classList.contains("open");
+    if (isOpen) {
+      wrap.style.maxHeight = "0px";
+      card.classList.remove("open");
+      header.setAttribute("aria-expanded", "false");
+    } else {
+      wrap.style.maxHeight = wrap.scrollHeight + "px";
+      card.classList.add("open");
+      header.setAttribute("aria-expanded", "true");
+    }
+  }
+
+  header.addEventListener("click", toggle);
+  header.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+  });
+});
+
+// reajusta a altura das cartas abertas quando a janela muda de tamanho
+window.addEventListener("resize", () => {
+  document.querySelectorAll(".letter-card.open .letter-body").forEach(wrap => {
+    wrap.style.maxHeight = wrap.scrollHeight + "px";
+  });
+});

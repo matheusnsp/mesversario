@@ -364,6 +364,44 @@ body {
   user-select: none;
 }
 
+/* ─── CARTAS RECOLHÍVEIS ─── */
+.letter-card.collapsible .letter-month {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0;
+  cursor: pointer;
+  padding-right: 28px;
+  transition: color 0.25s ease;
+}
+
+.letter-card.collapsible .letter-month:hover { color: var(--blush); }
+
+.letter-card.collapsible .letter-month:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.letter-chevron {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--gold);
+  transition: transform 0.35s cubic-bezier(.23,1,.32,1);
+}
+
+.letter-card.open .letter-chevron { transform: rotate(180deg); }
+
+.letter-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(.23,1,.32,1);
+}
+
+.letter-card.collapsible .letter-body .letter-text {
+  padding-top: 18px;
+}
+
 /* ─── ASSINATURA FINAL ─── */
 .signature {
   text-align: right;
@@ -755,6 +793,33 @@ body {
 }
 
 .bible-banner--gold cite {
+  color: var(--gold);
+}
+
+/* ─── NAV ENTRE CAPÍTULOS ─── */
+.chapter-nav {
+  text-align: center;
+  margin-top: 28px;
+}
+
+.chapter-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(245,198,206,0.75);
+  border: 1px solid rgba(200,55,74,0.3);
+  border-radius: 100px;
+  padding: 9px 18px;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.chapter-nav a:hover {
+  border-color: var(--gold);
   color: var(--gold);
 }
 
